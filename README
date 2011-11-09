@@ -11,13 +11,14 @@ Limitations:
 - No authentication
 
 Ruby code to send a file:
+    troois_url = 'http://your-troois-app.appspot.com/' # Configure yours here
     require 'open-uri'
     require 'rest_client'
-    form  = open('http://your-troois-app.appspot.com/') {|f| f.read }
-    post_url = form.gsub(/.*action=\"/, "").gsub(/\" method.*/, "")
-    puts "Dynamic URL of Google App Engine blobstore upload:" + post_url
-    key = RestClient.post post_url, :file => File.new("tmp/reports.zip", 'rb')
-    puts "Report sent to Google App Engine, retrievable with key:" + key
+    form = open(troois_url) {|f| f.read }
+    post_url = form.gsub(/.*action=\"/, '').gsub(/\" method.*/, '')
+    puts 'Dynamic URL for Google App Engine blobstore upload:' + post_url
+    key = RestClient.post post_url, :file => File.new('your-file.odt', 'rb')
+    puts 'File now available at: ' + troois_url + 'serve/' + key
 
 Then anyone with the URL can download the file.
 The URL contains a very long randomly-generated unique key.
