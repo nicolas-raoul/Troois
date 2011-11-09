@@ -1,0 +1,26 @@
+Troois: Like Amazon S3 on Google App Engine
+
+Goal: Install Troois to your Google App Engine account, and you can send/retrieve files, a bit like on Amazon S3.
+
+Who would use Troois instead of Amazon S3, which is so cheap?
+- Open source project who have zero money.
+- People who want zero running costs.
+
+Limitations:
+- No encryption
+- No authentication
+
+Ruby code to send a file:
+    require 'open-uri'
+    require 'rest_client'
+    form  = open('http://your-troois-app.appspot.com/') {|f| f.read }
+    post_url = form.gsub(/.*action=\"/, "").gsub(/\" method.*/, "")
+    puts "Dynamic URL of Google App Engine blobstore upload:" + post_url
+    key = RestClient.post post_url, :file => File.new("tmp/reports.zip", 'rb')
+    puts "Report sent to Google App Engine, retrievable with key:" + key
+
+Then anyone with the URL can download the file.
+The URL contains a very long randomly-generated unique key.
+
+TODO:
+The Ruby code above could proably be improved to remove the form-parsing step.
